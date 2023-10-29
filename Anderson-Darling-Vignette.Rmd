@@ -1,5 +1,5 @@
 ---
-title: "Anderson-Darling"
+title: "Anderson-Darling Test"
 author: "Lillian Holden"
 date: "2023-10-19"
 output: html_document
@@ -9,4 +9,47 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-Anderson Darling
+Anderson Darling Introduction
+
+The Anderson Darling test is a form of the Goodness of Fit test used to determine if a sample of data came from a specific kind of distribution. It is commonly used to determine if the sample of data came from a normal distribution. It is a modification of the Kolmogorov-Smirnov test that gives more weight to the tails. This means ...
+
+H0 is the data that follows a specific distribution
+HA is the data that does not follow the specific distribution 
+
+The equation is as follows:
+
+A^2 = -N-S
+
+where S=N∑i=1((2i−1)/N)(lnF(Yi)+ln(1−F(YN+1−i)) 
+
+F is the cumulative distribution function of the specified distribution.
+Yi is the ordered data. 
+
+The test is useful to test normality which is common for regression, ANOVA, t-tests and more. 
+
+To use the Anderson Darling function, you must install the package known as "nortest" and use the the ad.test() function. 
+
+```{r}
+install.packages("nortest")
+library(nortest)
+```
+```{r}
+#Create your own function that is normally distributed 
+set.seed(1) #Use the set.seed() function to allow the data to repeatable
+ndistribution <- rnorm(100) #The rnorm() function generates a random sample with a default mean of 0 and standard deviation of 1
+ndistribution
+```
+## Perform the Anderson Darling Test on the Sample of Data using the ad.test() function
+```{r}
+ad.test(ndistribution)
+```
+
+```{r}
+nodistribution <- c(1:100)
+nodistribution
+```
+
+```{r}
+ad.test(nodistribution)
+```
+
