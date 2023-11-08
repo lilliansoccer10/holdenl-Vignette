@@ -3,6 +3,8 @@ title: "Anderson-Darling Test"
 author: "Lillian Holden"
 date: "2023-10-19"
 output: html_document
+editor_options: 
+  chunk_output_type: inline
 ---
 
 ```{r setup, include=FALSE}
@@ -31,9 +33,67 @@ The test is useful to test normality which is common for regression, ANOVA, t-te
 To use the Anderson Darling function, you must install the package known as "nortest" and use the the ad.test() function. 
 
 ```{r}
-install.packages("nortest")
+#install.packages("nortest")
 library(nortest)
 ```
+
+
+### Using the Anderson-Darling Test with Preset Normal Distribution Data Known as "Iris" -- change data set-- 
+````{r}
+set.seed(1)
+d <- iris
+d
+```
+## Select a Variable to Test 
+
+```{r}
+a <- d$Sepal.Length
+a
+```
+## Determining the A Value Step by Step
+```{r}
+x <- sort(a[complete.cases(a)]) #a is the data set that you want to test
+n <- length(x) #length must be greater than 7
+logp1 <- pnorm((x - mean(x))/sd(x), log.p = TRUE)
+logp2 <- pnorm(-(x - mean(x))/sd(x), log.p = TRUE)
+h <- (2 * seq(1:n) - 1) * (logp1 + rev(logp2))
+A <- -n - mean(h)
+A # The A value is computed 
+```
+
+## Determining the AA Value Needed to Determine the P Value  
+```{r}
+AA <- (1 + 0.75/n + 2.25/n^2) * A
+AA #The AA value is computed
+```
+
+## Determining the P Value Step by Step
+
+### Criteria for Determining the P Value
+
+- Use this if AA > 10
+pval <- 3.7e-24
+
+- Use this if AA < 0.2
+pval <- 1 - exp(-13.436 + 101.14 * AA - 223.73 * AA^2
+    
+- Use this if AA < 0.34  
+pval <- 1 - exp(-8.318 + 42.796 * AA - 59.938 * AA^2
+
+- Use this if AA < 0.6
+pval <- exp(0.9177 - 4.279 * AA - 1.38 * AA^2
+
+- Use this if AA < 10
+pval <- exp(1.2937 - 5.709 * AA + 0.0186 * AA^2
+
+- Use the AA Value to Determine the P Value 
+
+## Using the AA Value to Determine the P Value
+```{r}
+pval <- exp(1.2937 - 5.709 * AA + 0.0186 * AA^2)
+pval #The P Value is computed
+```
+
 ```{r}
 #Create your own function that is normally distributed 
 set.seed(1) #Use the set.seed() function to allow the data to repeatable
@@ -41,7 +101,7 @@ ndistribution <- rnorm(100, 25, 1) #The rnorm() function generates a random samp
 ndistribution
 ```
 
-## Perform the Anderson Darling Test on the Sample of Data using the ad.test() function
+## Perform the Anderson Darling Test on the Sample of Data using the ad.test() built in function
 ```{r}
 ad.test(ndistribution)
 ```
@@ -64,39 +124,3 @@ hist(nodistribution)
 ```{r}
 ad.test(nodistribution)
 ```
-
-### Using the Anderson-Darling Test with Preset Normal Distribution Data Known as "Iris"
-````{r}
-set.seed(1)
-d <- iris
-d
-```
-
-## Determining the A Value Step by Step
-x <- sort(d[complete.cases(d)])
-n <- length(x) #length must be greater than 7
-logp1 <- pnorm((x - mean(x))/sd(x), log.p = TRUE)
-logp2 <- pnorm(-(x - mean(x))/sd(x), log.p = TRUE)
-h <- (2 * seq(1:n) - 1) * (logp1 + rev(logp2))
-A <- -n - mean(h)
-A # The A value is computed 
-AA <- (1 + 0.75/n + 2.25/n^2) * A
-AA
-
-## Determining the P Value Step by Step
-### If AA > 10 
-pval <- 3.7e-24
-
-### Then use this if AA < 0.2
-pval <- 1 - exp(-13.436 + 101.14 * AA - 223.73 * AA^2
-    
-### Use this if AA < 0.34  
-pval <- 1 - exp(-8.318 + 42.796 * AA - 59.938 * AA^2
-
-### Use this if AA < 0.6
-pval <- exp(0.9177 - 4.279 * AA - 1.38 * AA^2
-
-### Use this if AA < 10
-pval <- exp(1.2937 - 5.709 * AA + 0.0186 * AA^2
-
-
