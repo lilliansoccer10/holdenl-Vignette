@@ -7,6 +7,11 @@ editor_options:
   chunk_output_type: inline
 ---
 
+#need to have them sample different numbers of the chickwts data set
+#need to have them pull out residuals
+#need to explain the equation?? 
+
+
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
@@ -32,7 +37,7 @@ The test is useful to test normality which is common for regression, ANOVA, t-te
 
 To use the Anderson Darling function, you must install the package known as "nortest" and use the the ad.test() function. 
 
-The Anderson Darling Test starts with a null statement that your data is not statistically different than normal. The alternate statement is that it is different from normal. The results you will get will suggest you can either reject the null, or fail to reject the null. The test rejects the hypothesis of normality when the p-value is less than or equal to 0.05 and accepts the null hypothesis if it is greater than 0.05. 
+The Anderson Darling Test starts with a null statement that your data is not statistically different than normal. The alternate statement is that it is different from normal. The results you will get will suggest you can either reject the null, or fail to reject the null. The test rejects the null hypothesis of normality when the p-value is less than or equal to 0.05 and accepts the null hypothesis (fauls to reject the null) if it is greater than 0.05. 
 
 ```{r}
 #install.packages("nortest")
@@ -40,16 +45,16 @@ library(nortest)
 ```
 
 
-### Using the Anderson-Darling Test with Preset Normal Distribution Data Known as "Iris" -- change data set-- 
+### Using the Anderson-Darling Test with Preset Normal Distribution Data Known as "chickwts" -- chick weights based on different types of feed -- 
 ````{r}
 set.seed(1)
-d <- iris
+d <- chickwts
 d
 ```
 ## Select a Variable to Test 
 
 ```{r}
-a <- d$Sepal.Length
+a <- d$weight
 a
 ```
 
@@ -99,7 +104,7 @@ pval <- exp(1.2937 - 5.709 * AA + 0.0186 * AA^2
 pval <- exp(1.2937 - 5.709 * AA + 0.0186 * AA^2)
 pval #The P Value is computed
 ```
-
+It can be concluded that the weight in chickwts is normally distributed because the p value is greater than 0.05. 
 
 ## Challenge 1
 Determine the A, AA, and P values of the following data set (). Compare the data of two diff variables. Are they both originating from normal distribution? How do you know this?
