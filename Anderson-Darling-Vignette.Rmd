@@ -11,6 +11,8 @@ editor_options:
 #need to have them pull out residuals
 #need to explain the equation?? 
 
+greater than 7, but advised to do 20
+
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
@@ -19,7 +21,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 Anderson Darling Introduction
 
-The Anderson Darling test is a form of the Goodness of Fit test used to determine if a sample of data came from a specific kind of distribution. It is commonly used to determine if the sample of data came from a normal distribution. It is a modification of the Kolmogorov-Smirnov test that gives more weight to the tails. This means ...
+The Anderson Darling test is a form of the Goodness of Fit test used to determine if a sample of data comes from a specific kind of distribution. It is commonly used to determine if the sample of data came from a normal distribution. It is a modification of the Kolmogorov-Smirnov test that gives more weight to the tails. This means ...
 
 H0 is the data that follows a specific distribution
 HA is the data that does not follow the specific distribution 
@@ -35,7 +37,6 @@ Yi is the ordered data.
 
 The test is useful to test normality which is common for regression, ANOVA, t-tests and more. 
 
-To use the Anderson Darling function, you must install the package known as "nortest" and use the the ad.test() function. 
 
 The Anderson Darling Test starts with a null statement that your data is not statistically different than normal. The alternate statement is that it is different from normal. The results you will get will suggest you can either reject the null, or fail to reject the null. The test rejects the null hypothesis of normality when the p-value is less than or equal to 0.05 and accepts the null hypothesis (fauls to reject the null) if it is greater than 0.05. 
 
@@ -45,13 +46,13 @@ library(nortest)
 ```
 
 
-### Using the Anderson-Darling Test with Preset Normal Distribution Data Known as "chickwts" -- chick weights based on different types of feed -- 
+### Using the Anderson-Darling Test with Preset Normal Distribution Data Known as "chickwts" -- Newly hatched chicks were randomly allocated into six groups, and each group was given a different feed supplement. Their weights in grams after six weeks are given along with feed types. (https://www.rdocumentation.org/packages/datasets/versions/3.6.2/topics/chickwts)
 ````{r}
 set.seed(1)
 d <- chickwts
 d
 ```
-## Select a Variable to Test 
+## Select a The Weight Variable to Test 
 
 ```{r}
 a <- d$weight
