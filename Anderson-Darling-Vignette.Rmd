@@ -32,7 +32,7 @@ knitr::opts_chunk$set(echo = TRUE)
 #### The test is useful to test normality which is common for regression, ANOVA, t-tests and more. The data sets need to be greater than 7, but are advised to be greater than 20. 
 
 
-#### The Anderson Darling Test starts with a null statement that your data is not statistically different than normal. The alternate statement is that it is different from normal. The results you will get will suggest you can either reject the null, or fail to reject the null. The test rejects the null hypothesis of normality when the p-value is less than or equal to 0.05 and accepts the null hypothesis (fauls to reject the null) if it is greater than 0.05. 
+#### The Anderson Darling Test starts with a null statement that your data is not statistically different than normal. The alternate statement is that it is different from normal. The results you will get will suggest you can either reject the null, or fail to reject the null. The test rejects the null hypothesis of normality when the p-value is less than or equal to 0.05 and accepts the null hypothesis (faults to reject the null) if it is greater than 0.05. 
 
 ### Packages to Install
 ```{r}
@@ -46,7 +46,7 @@ library(nortest)
 ````{r}
 set.seed(1)
 d <- chickwts
-d
+head(d)
 ```
 ### Select a The Weight Variable to Test 
 
@@ -120,7 +120,7 @@ A <- -n - mean(h)
 A # The A value is computed 
 ```
 
-### Determinging the AA Value
+### Determining the AA Value
 ```{r}
 AA <- (1 + 0.75/n + 2.25/n^2) * A
 AA #The AA value is computed
@@ -131,7 +131,7 @@ AA #The AA value is computed
 pval <- exp(0.9177 - 4.279 * AA - 1.38 * AA^2)
 pval
 ```
-
+ The p-value is computed from the modified statistic Z=A(1.0+0.75/n+2.25/n2)Z=A(1.0+0.75/n+2.25/n 2)\ 
 
 ## Perform the Anderson Darling Test on the Sample of Data using the ad.test() built in function
 
