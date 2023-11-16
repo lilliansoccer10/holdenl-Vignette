@@ -7,62 +7,55 @@ editor_options:
   chunk_output_type: inline
 ---
 
-#need to have them sample different numbers of the chickwts data set
-#need to have them pull out residuals
-#need to explain the equation?? 
-
-greater than 7, but advised to do 20
-
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
 
-Anderson Darling Introduction
+## Anderson Darling Introduction
 
-The Anderson Darling test is a form of the Goodness of Fit test used to determine if a sample of data comes from a specific kind of distribution. It is commonly used to determine if the sample of data came from a normal distribution. It is a modification of the Kolmogorov-Smirnov test that gives more weight to the tails. This means ...
+#### The Anderson Darling test is a form of the Goodness of Fit test used to determine if a sample of data comes from a specific kind of distribution. It is commonly used to determine if the sample of data came from a normal distribution. It is a modification of the Kolmogorov-Smirnov test that gives more weight to the tails. This means ...
 
-H0 is the data that follows a specific distribution
-HA is the data that does not follow the specific distribution 
+#### - H0 is the data that follows a specific distribution
+#### - HA is the data that does not follow the specific distribution 
 
-The equation is as follows:
+#### The equation is as follows:
 
-A^2 = -N-S
+#### - A^2 = -N-S
 
-where S=N∑i=1((2i−1)/N)(lnF(Yi)+ln(1−F(YN+1−i)) 
+#### - where S=N∑i=1((2i−1)/N)(lnF(Yi)+ln(1−F(YN+1−i)) 
 
-F is the cumulative distribution function of the specified distribution.
-Yi is the ordered data. 
+#### - F is the cumulative distribution function of the specified distribution.
+#### - Yi is the ordered data. 
 
-The test is useful to test normality which is common for regression, ANOVA, t-tests and more. 
+#### The test is useful to test normality which is common for regression, ANOVA, t-tests and more. The data sets need to be greater than 7, but are advised to be greater than 20. 
 
 
-The Anderson Darling Test starts with a null statement that your data is not statistically different than normal. The alternate statement is that it is different from normal. The results you will get will suggest you can either reject the null, or fail to reject the null. The test rejects the null hypothesis of normality when the p-value is less than or equal to 0.05 and accepts the null hypothesis (fauls to reject the null) if it is greater than 0.05. 
+#### The Anderson Darling Test starts with a null statement that your data is not statistically different than normal. The alternate statement is that it is different from normal. The results you will get will suggest you can either reject the null, or fail to reject the null. The test rejects the null hypothesis of normality when the p-value is less than or equal to 0.05 and accepts the null hypothesis (fauls to reject the null) if it is greater than 0.05. 
 
+### Packages to Install
 ```{r}
 #install.packages("nortest")
 library(nortest)
 ```
 
-
-### Using the Anderson-Darling Test with Preset Normal Distribution Data Known as "chickwts" -- Newly hatched chicks were randomly allocated into six groups, and each group was given a different feed supplement. Their weights in grams after six weeks are given along with feed types. (https://www.rdocumentation.org/packages/datasets/versions/3.6.2/topics/chickwts)
+## Using the Anderson-Darling Test with Preset Normal Distribution Data Known as "chickwts" 
+### Description of the Data Set: Newly hatched chicks were randomly allocated into six groups, and each group was given a different feed supplement. Their weights in grams after six weeks are given along with feed types. (https://www.rdocumentation.org/packages/datasets/versions/3.6.2/topics/chickwts)
+<br>
 ````{r}
 set.seed(1)
 d <- chickwts
 d
 ```
-## Select a The Weight Variable to Test 
+### Select a The Weight Variable to Test 
 
 ```{r}
 a <- d$weight
 a
 ```
 
-```{r}
-ad.test(a)
-```
-## Determining the A Value Step by Step Needed to Determine the AA Value 
+### Determining the A Value Step by Step Needed to Determine the AA Value 
 ```{r}
 x <- sort(a[complete.cases(a)]) #a is the data set that you want to test
 n <- length(x) #length must be greater than 7
@@ -73,13 +66,13 @@ A <- -n - mean(h)
 A # The A value is computed 
 ```
 
-## Determining the AA Value Needed to Determine the P Value  
+### Determining the AA Value Needed to Determine the P Value  
 ```{r}
 AA <- (1 + 0.75/n + 2.25/n^2) * A
 AA #The AA value is computed
 ```
 
-## Determining the P Value Step by Step
+### Determining the P Value Step by Step
 
 ### Criteria for Determining the P Value
 
@@ -100,21 +93,49 @@ pval <- exp(1.2937 - 5.709 * AA + 0.0186 * AA^2
 
 - Use the AA Value to Determine the P Value 
 
-## Using the AA Value to Determine the P Value
+### Using the AA Value to Determine the P Value
 ```{r}
 pval <- exp(1.2937 - 5.709 * AA + 0.0186 * AA^2)
 pval #The P Value is computed
 ```
 It can be concluded that the weight in chickwts is normally distributed because the p value is greater than 0.05. 
 
-## Challenge 1
-Determine the A, AA, and P values of the following data set (). Compare the data of two diff variables. Are they both originating from normal distribution? How do you know this?
+### Challenge 1
+Determine the A, AA, and P values of a sample of the chickwts data set. Compare the data of two diff variables. Are they both originating from normal distribution? How do you know this?
 
+```{r}
+set.seed(1)
+b <- sample(a, size=71, replace=TRUE, prob=NULL) #I chose 71 because that is the lenth of the initial data set
+b
+```
+### Determine the A Value
+
+```{r}
+x <- sort(b[complete.cases(b)]) #a is the data set that you want to test, complete.cases() is for removing missing values from a vector
+n <- length(x) #length must be greater than 7
+logp1 <- pnorm((x - mean(x))/sd(x), log.p = TRUE)
+logp2 <- pnorm(-(x - mean(x))/sd(x), log.p = TRUE)
+h <- (2 * seq(1:n) - 1) * (logp1 + rev(logp2))
+A <- -n - mean(h)
+A # The A value is computed 
+```
+
+### Determinging the AA Value
+```{r}
+AA <- (1 + 0.75/n + 2.25/n^2) * A
+AA #The AA value is computed
+```
+
+### Determine Which Equation to Use for the p Value based on the Criteria of AA
+```{r}
+pval <- exp(0.9177 - 4.279 * AA - 1.38 * AA^2)
+pval
+```
 
 
 ## Perform the Anderson Darling Test on the Sample of Data using the ad.test() built in function
 
-#Creating a function that is normally distributed 
+### Creating a function that is normally distributed 
 ```{r}
 set.seed(1) #Use the set.seed() function to allow the data to repeatable
 ndistribution <- rnorm(100, 25, 1) #The rnorm() function generates a random sample with a default mean of 0 and standard deviation of 1
@@ -126,16 +147,15 @@ ad.test(ndistribution)
 ```
 Because the P value is significant, greater than 0.05, it can be determined that the data is normally distributed and that the null hypothesis can be accepted. 
 
-##Plotting the Data to Show Normal Distribution
+### Plotting the Data 
 ```{r}
-hist(ndistribution)
+hist(ndistribution, main = "Histogram Showing Normal Distribution")
 ```
 
-## Challenge 2
+### Challenge 2
 Create a data set using a poisson function that is not distributed normally. Plot the data using a histogram and compare it to the normally distributed data. Use the ad.test() to confirm that the data is not normally distributed. Explain why your results confirm that 
 
 
-##ANSWER
 ```{r}
 set.seed(1)
 nodistribution <- rpois(100, 25)
@@ -143,16 +163,16 @@ nodistribution
 ```
 
 ```{r}
-hist(nodistribution)
-```
-
-```{r}
 ad.test(nodistribution)
 ```
 Because the P value is not significant, less than or equal to 0.05, it can be determined that the data is different than normal and the null hypothesis is rejected.
 
+### Plotting the Data 
+```{r}
+hist(nodistribution, main= "Histogram Showing No Normality ")
+```
 
-
+### Shortcut to Creating Data Sets and Using ad.test() all at once
 ```{r}
 ad.test(rnorm(100, mean = 5, sd = 3))
 ```
